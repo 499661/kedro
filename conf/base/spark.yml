@@ -1,0 +1,22 @@
+# You can define spark specific configuration here.
+
+#spark.databricks.delta.properties.defaults.logRetentionDuration is set using Hooks.py and it will overwrite any value we assign in this file.
+#In current code, logRetentionDuration is only set when delta table is being created, otherwise the parameter is ignored
+
+spark.driver.maxResultSize: 3g
+spark.sql.execution.arrow.pyspark.enabled: true
+
+# https://kedro.readthedocs.io/en/stable/11_tools_integration/01_pyspark.html#tips-for-maximising-concurrency-using-threadrunner
+spark.scheduler.mode: FAIR
+spark.master: local[*]
+
+# https://docs.microsoft.com/en-us/azure/databricks/kb/dev-tools/dbconnect-protoserializer-stackoverflow
+spark.driver.memory: 4g
+spark.driver.extraJavaOptions: -Xss32M
+
+# from ${databricks-connect get-spark-home}/conf/spark-defaults.conf
+spark.sql.catalogImplementation: in-memory
+
+spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite: true
+spark.databricks.delta.properties.defaults.autoOptimize.autoCompact: true
+

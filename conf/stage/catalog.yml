@@ -1,0 +1,135 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://kedro.readthedocs.io/en/stable/05_data/01_data_catalog.html
+#
+# We support interacting with a variety of data stores including local file systems, cloud, network and HDFS
+
+dim_location@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzone2s_main-data/source/ldw/product/location
+  file_format: "delta"
+
+dim_product@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzone2s_main-data/source/ldw/product/item
+  file_format: "delta"
+
+dim_customer@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzone2s_main-data/source/merged/customer/customer
+  file_format: "delta"
+
+# see ml_project/datasets/create_base_tables.py
+# This table is created with `CREATE TABLE <name> USING PARQUET LOCATION ...`
+# whereas the other ones are created with `USING DELTA`.
+dim_date@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzone3_main-data/source/master/dim/date_dim
+  file_format: "delta"
+
+retail_sale@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzone2s_main-data/source/ldw/product/retail_sale
+  file_format: "delta"
+
+# see ml_project/datasets/etl_cx_weekly_deltable_populate.py
+cx_transact_yearweek@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzonelab_main-data/silver/source/data_science/customer_churn/input/cx_transact_yearweek
+  file_format: delta
+  load_args:
+    type: spark.SparkDataSet
+    file_format: delta
+  save_args:
+    type: spark.SparkDataSet
+    file_format: delta
+    mode: overwrite
+    partitionBy:
+      - year_number
+      - week_number
+
+# see ml_project/datasets/etl_hhn_weekly_deltable_populate.py
+hhn_transact_yearweek@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzonelab_main-data/silver/source/data_science/customer_churn/input/hhn_transact_yearweek
+  file_format: delta
+  load_args:
+    type: spark.SparkDataSet
+    file_format: delta
+  save_args:
+    type: spark.SparkDataSet
+    file_format: delta
+    mode: overwrite
+    partitionBy: hhn_batch_num
+
+# see ml_project/features/rnn_training_data_prep.py (line 176 hhn_transact)
+churn_test@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzonelab_main-data/silver/source/data_science/customer_churn/input/churn_test_ovr
+  file_format: delta
+  load_args:
+    type: spark.SparkDataSet
+    file_format: delta
+  save_args:
+    type: spark.SparkDataSet
+    file_format: delta
+    mode: overwrite
+    partitionBy:
+      - year_number
+      - week_number
+
+# see ml_project/features/rnn_training_data_prep.py
+# and ml_project/model/train/main.py line 315. (test_set_df)
+churn_test_featurized@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzonelab_main-data/silver/source/data_science/customer_churn/input/churn_test_featurized
+  file_format: delta
+  load_args:
+    type: spark.SparkDataSet
+    file_format: delta
+  save_args:
+    type: spark.SparkDataSet
+    file_format: delta
+    mode: overwrite
+
+# see ml_project/features/rnn_training_data_prep.py (line 176 hhn_transact)
+churn_train@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzonelab_main-data/silver/source/data_science/customer_churn/input/churn_train_ovr
+  file_format: delta
+  load_args:
+    type: spark.SparkDataSet
+    file_format: delta
+  save_args:
+    type: spark.SparkDataSet
+    file_format: delta
+    mode: overwrite
+    partitionBy:
+      - year_number
+      - week_number
+
+train_data:
+  type: pickle.PickleDataSet
+  filepath: /dbfs/FileStore/databricks-sof-models-churn/data/train_data.pkl
+  backend: joblib
+
+test_data:
+  type: pickle.PickleDataSet
+  filepath: /dbfs/FileStore/databricks-sof-models-churn/data/test_data.pkl
+  backend: joblib
+
+churn_output@spark:
+  type: spark.SparkDataSet
+  filepath: dbfs:/mnt/sofdlzonelab_main-data/silver/source/data_science/customer_churn/output/churn_output
+  file_format: delta
+  load_args:
+    type: spark.SparkDataSet
+    file_format: delta
+  save_args:
+    type: spark.SparkDataSet
+    file_format: delta
+    mode: overwrite
+    partitionBy:
+      - max_week_ending_date
+    replaceWhere: filled in by hook

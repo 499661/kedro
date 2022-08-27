@@ -1,0 +1,53 @@
+common:
+  end_date_train:
+  end_date_pred:
+  n_features_total: 16
+  train_frac: 0.15
+  test_frac: 0.025
+  predict_frac:
+  n_weeks_total_train: 156
+  n_weeks_total_pred: 156
+  n_weeks_stats: 156
+  n_weeks_churn: 13
+  n_validation_timesteps: 17
+  n_testing_timesteps: 17
+  metrics_min_box_width: 10
+  consider_last_event: true
+  batch_numbers_train:
+  batch_numbers_pred:
+  epochs : 50
+  batch_size : 128
+  keras_fuzz_factor_exponent: -8
+  early_stop_patience: 7
+  reduce_lr_patience: 3
+  recent_runs_lookback_hrs: 24
+  model_name: churn_mvp
+  model_description: "MVP version of the Churn model"
+  environment: prod
+  artifact_root: /dbfs/FileStore/databricks-sof-models-churn/
+  default_region: Surrey Central
+  t_test_significance_level: 0.05
+  t_test_n_folds: 5
+  webhook_url: https://owfg.webhook.office.com/webhookb2/08a37fb4-e893-4e4f-a8e8-589152fc7bbf@fdb969dd-87c5-4a41-87d6-86f80f4581db/IncomingWebhook/c4ad2c7ad81f4e0ba1a6db9cf433b64b/afe2f6a7-2d13-4f5b-b0fd-a93043a90512
+  
+mlflow:
+  mlflow_tracking_uri: databricks
+  mlflow_experiment: /Shared/ml_projects/ml_project/churn_mvp
+
+  
+hyperparams_search:
+  hyperparams_1: 
+    id: 1
+    lstm_1_units: 8
+    lstm_2_units: 8
+    lstm_final_units: 4
+  hyperparams_2:
+    id: 2
+    lstm_1_units: 10
+    lstm_2_units: 30
+    lstm_final_units: 5
+  hyperparams_3:
+    id: 3
+    lstm_1_units: 64
+    lstm_2_units: 48
+    lstm_final_units: 32

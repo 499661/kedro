@@ -1,0 +1,17 @@
+{
+  "dev": {
+    "SilverMountPath": "/mnt/sofdlzonelab_data-science-dev/shared/silver",
+    "GoldMountPath": "/mnt/sofdlzonelab_data-science-dev/shared/gold",
+    "GoldReadMountPath": "/mnt/sofdlzone3_main-data"
+  },
+  "stage": {
+    "SilverMountPath": "/mnt/sofdlzonelab_main-data/silver",
+    "GoldMountPath": "/mnt/sofdlzonelab_main-data/gold",
+    "GoldReadMountPath": "/mnt/sofdlzone3_main-data"
+  },
+  "prod": {
+    "SilverMountPath": "/mnt/sofdlzone2s_main-data",
+    "GoldMountPath": "/mnt/sofdlzone3_main-data",
+    "GoldReadMountPath": "/mnt/sofdlzone3_main-data"
+  }
+}
